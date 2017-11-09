@@ -1,2 +1,2 @@
 # ideas-ui
-angular4 oauth ideas
+react oauth ideas
