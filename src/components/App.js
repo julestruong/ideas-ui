@@ -1,11 +1,17 @@
 import React from 'react';
+import { Appbar, Container, Button } from 'muicss/react';
 
-export default class App extends React.Component {
+class App extends React.Component {
     render() {
         return (
-            <div style={{textAlign: 'center'}}>
-                <h1>Hello World {this.props.name} </h1>
+            <div>
+                <Appbar></Appbar>
+                <Container>
+                    <Button color="primary">Click me !</Button>
+                </Container>
             </div>
         );
     }
 }
+
+export default App;
