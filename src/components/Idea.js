@@ -18,6 +18,14 @@ class Idea extends React.Component {
         this.voteIdea = this.voteIdea.bind(this);
     }
 
+    componentDidMount() {
+        console.log('Component Idea did Mount');
+    }
+
+    componentWillUnmount() {
+        console.log('Component Idea will unmount');
+    }
+
     voteIdea(evt) {
         this.setState(prevState => ({
             nbVoters: prevState.nbVoters + 1

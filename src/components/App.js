@@ -1,6 +1,7 @@
 import React from 'react';
 import { Appbar, Container, Button } from 'muicss/react';
 import IdeaList from './IdeaList';
+import { FormattedMessage } from 'react-intl';
 
 class App extends React.Component {
 
@@ -12,7 +13,18 @@ class App extends React.Component {
         ];
         return (
             <div>
-                <Appbar></Appbar>
+                <Appbar>
+                    <table width="100%">
+                        <tbody>
+                            <tr><td>
+                                <FormattedMessage
+                                    id="welcome"
+                                    values={{name: "jean"}}
+                                />    
+                            </td></tr>
+                        </tbody>
+                    </table>
+                </Appbar>
                 <Container>
                     <IdeaList ideas={ideas}/>
                 </Container>
