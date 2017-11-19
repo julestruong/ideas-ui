@@ -46,8 +46,9 @@ class App extends React.Component {
                     <Form 
                     ideas={this.state.ideas}
                     onIdeasChange={this.onIdeasChange}
-                    >Children PROP</Form>
-                    <IdeaList ideas={this.state.ideas}/>
+                    ></Form>
+                    {/* <IdeaList ideas={this.state.ideas}/> */}
+                    <IdeaList/>
                 </Container>
             </div>
         );

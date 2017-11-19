@@ -49,6 +49,7 @@ class Form extends React.Component
                 <Button color="primary" onClick={this.onSubmit}>
                     <FormattedMessage id="submit"/>
                 </Button>
+                {this.props.children}
             </div>
         );
     };
