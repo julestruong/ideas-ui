@@ -12,6 +12,7 @@ const config = {
     output: {
         path: path.join(__dirname, 'dist'),
         filename: 'app.bundle.js',
+        publicPath: '/',
     },
     module: {
         loaders: [
@@ -29,7 +30,10 @@ const config = {
             }
         ]
     },
-    plugins: [HtmlWebpackPluginConfig]
+    plugins: [HtmlWebpackPluginConfig],
+    devServer: {
+        historyApiFallback: true,
+    }
 };
 
 module.exports = config;

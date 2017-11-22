@@ -4,10 +4,12 @@
     ],
     "plugins": [
         [
-          "react-intl", {
+          "react-intl", 
+          {
             "messagesDir": "./build/messages",
             "enforceDescriptions": false
-          }
+          },
+          ["transform-object-rest-spread", { "useBuiltIns": true }]
         ]
     ]
 }
