@@ -8,7 +8,7 @@ class Auth {
             redirectUri: 'http://localhost:8081/callback',
             audience: 'https://julestruong.eu.auth0.com/userinfo',
             responseType: 'token id_token',
-            scope: 'openid profile'
+            scope: 'openid profile email'
         });
 
         this.login = this.login.bind(this); 
