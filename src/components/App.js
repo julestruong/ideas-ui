@@ -4,6 +4,9 @@ import IdeaList from './IdeaList';
 import Form from './Form';
 import { FormattedMessage } from 'react-intl';
 
+import gql from 'graphql-tag';
+import { graphql } from 'react-apollo';
+
 class App extends React.Component {
 
     
@@ -11,18 +14,25 @@ class App extends React.Component {
         super(props);
 
         this.state = {
-            ideas: [
-                { id: 1, body: 'Parler en anglais', author: 'Jules' },
-                { id: 2, body: 'Speak in spanish', author: 'Julio' },
-            ],
+            ideas: [],
+            refetch: () => {},
         };
 
         this.onIdeasChange = this.onIdeasChange.bind(this);
     };
 
-    onIdeasChange(ideas) {
-        console.log("Change ideas", ideas);
-        this.setState({ideas: ideas});
+    onIdeasChange(idea) {
+        this.setState(prevState => (
+            { ideas: [...prevState.ideas, idea] }
+        ));
+    }
+
+    componentWillReceiveProps(nextProps) {
+        console.log("nextprops", nextProps);
+        this.setState({
+            ideas: nextProps.data.ideas ? nextProps.data.ideas : [],
+            refetch: nextProps.data.refetch
+        })
     }
 
     render() {
@@ -44,15 +54,27 @@ class App extends React.Component {
                 </Appbar>
                 <Container>
                     <Form 
-                    ideas={this.state.ideas}
-                    onIdeasChange={this.onIdeasChange}
+                        onIdeasChange={this.onIdeasChange}
                     ></Form>
-                    {/* <IdeaList ideas={this.state.ideas}/> */}
-                    <IdeaList/>
+                    <IdeaList ideas={this.state.ideas} refetch={this.state.refetch}/>
                 </Container>
             </div>
         );
     }
 }
 
-export default App;
+const query = gql`
+query IdeasQuery {
+    ideas {
+        id,
+        body,
+        email,
+        votes,
+        voters,
+        week
+    }
+} 
+`;
+
+
+export default  graphql(query)(App);

@@ -1,7 +1,7 @@
 import React from 'react';
 import Idea from './Idea';
-import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
+import { Button } from 'muicss/react';
+import { FormattedMessage } from 'react-intl';
 
 /**
  * 
@@ -10,90 +10,34 @@ class IdeaList extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log(props);
         this.state = {
-            ideas: {},
-            refetch: () =>  {}
+            ideas: props.ideas,
+            refetch: props.refetch,
         }
-    }
-
-    componentDidMount() {
-        console.log(this.props);
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            ideas: nextProps.data.ideas,
-            refetch: nextProps.data.refetch
-        })
-        console.log("WilReceive", nextProps);
-    }
-
-    componentDidUpdate() {
-        console.log("component did update");
+            ideas: nextProps.ideas ? nextProps.ideas : []
+        });
     }
 
     render() {
-        console.log("RENDER", this.state);
-        const ideas = this.props.ideas || [];
+        const ideas = this.state.ideas;
         const listIdeas = ideas.map((idea) => 
             (<Idea className="list-ideas" key={idea.id} idea={idea}></Idea>)
         );
 
-        // return (
-        //     <div>
-        //         <div className="list-ideas">{listIdeas}</div>
-        //         <div onClick={() => refetch()}>
-        //             Refetch
-        //         </div>
-        //     </div>
-        // );
-
-        return (<div>
-            <div onClick={() => this.state.refetch()}>
-                Refetch
+        return (
+            <div>
+                <div className="list-ideas">{listIdeas}</div>
+                <Button color="accent" onClick={() => this.state.refetch()}>
+                    <FormattedMessage id="refetch"/>
+                </Button>
             </div>
-            <ul>
-                {this.state.ideas.length && this.state.ideas.map(idea => (
-                    <li key={idea.id}>
-                         {idea.body}
-                    </li>
-                ))}
-            </ul>
-        </div>);
+        );
     };
 }
 
-// function IdeaList({ data }) {
-//     console.log(data);
 
-//     return (
-//         <div>
-//             <div onClick={() => data.refetch()}>
-//                 Refetch
-//             </div>
-//             <ul>
-//                 {data.ideas && data.ideas.map(idea => (
-//                     <li key={idea.id}>
-//                          {idea.body}
-//                     </li>
-//                 ))}
-//             </ul>
-//         </div>
-//     );
-// }
-
-const query = gql`
-    query IdeasQuery {
-        ideas {
-            id,
-            body,
-            email,
-            votes,
-            voters,
-            week
-        }
-    } 
-`;
-
-export default graphql(query, { options: { variables: { }}})(IdeaList);
+export default IdeaList;

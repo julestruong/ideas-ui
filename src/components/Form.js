@@ -1,6 +1,22 @@
 import React from 'react';
 import { Input, Button } from 'muicss/react';
 import { FormattedMessage } from 'react-intl';
+import gql from 'graphql-tag';
+import { graphql } from 'react-apollo';
+
+const createIdea = gql`
+    mutation createIdea($body: String!) {
+        createIdea(body: $body) {
+            id,
+            body,
+            email,
+            votes,
+            voters,
+            week
+        }
+    }
+`
+
 /**
  * 
  */
@@ -8,8 +24,6 @@ class Form extends React.Component
 {
     constructor(props) {
         super(props);
-
-        this.ideas = props.ideas;
 
         this.state = {
             value: '',
@@ -26,20 +40,30 @@ class Form extends React.Component
     };
 
     onSubmit(e) {
-        this.ideas.push({
-            id: this.ideas.length + 1,
-            body: this.state.value,
+        this.props.mutate({
+            variables: { body: this.state.value }
+        }).then(({ data: { createIdea }, errors }) => {
+            if (errors) throw new Error(errors);
+    
+            this.props.onIdeasChange({
+                id: createIdea.id,
+                body: createIdea.body,
+                email: createIdea.email,
+                votes: createIdea.votes,
+                voters: createIdea.voters,
+                week: createIdea.week,
+            });
+            this.setState({value: ''});
+        }).catch((error) => {
+            console.log("error", error);
+            this.setState({value: ''});
         });
-
-        this.props.onIdeasChange(this.ideas);
-
-        this.setState({value: ''});
     }
 
     render() {
         return (
             <div>
-                {this.state.value}
+                Votre idée : {this.state.value}
                 <Input 
                     hint="Your idea" 
                     floatingLabel={true}
@@ -55,4 +79,4 @@ class Form extends React.Component
     };
 }
 
-export default Form;
+export default graphql(createIdea)(Form);

@@ -1,5 +1,14 @@
 import React from 'react';
 import { Panel, Button } from 'muicss/react';
+import gql from 'graphql-tag';
+import { graphql } from 'react-apollo';
+
+const voteMutation = gql`
+    mutation voteIdea($id: Int!) {
+        voteIdea(id: $id)
+    }
+`;
+
 /**
  * 
  */
@@ -8,6 +17,7 @@ class Idea extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            id: props.idea.id,
             body: props.idea.body,
             author: props.idea.author,
             createdAt: new Date(),
@@ -18,18 +28,21 @@ class Idea extends React.Component {
         this.voteIdea = this.voteIdea.bind(this);
     }
 
-    componentDidMount() {
-        console.log('Component Idea did Mount');
-    }
-
-    componentWillUnmount() {
-        console.log('Component Idea will unmount');
-    }
-
     voteIdea(evt) {
-        this.setState(prevState => ({
-            nbVoters: prevState.nbVoters + 1
-        }));
+        this.props.mutate({
+            variables: { id: this.state.id  } 
+        }).then(({ data, errors }) => {
+            if (errors) throw new Error(errors);
+            
+            console.log(data);
+            if(data.voteIdea) {
+                this.setState(prevState => ({
+                    nbVoters: prevState.nbVoters + 1
+                }));
+            }
+        }).catch((error) => {
+            console.log("error happened", error);
+        });
     };
 
     render() {
@@ -45,4 +58,4 @@ class Idea extends React.Component {
     };
 }
 
-export default Idea;
+export default graphql(voteMutation)(Idea);
